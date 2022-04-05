@@ -11,7 +11,7 @@ INSERT INTO
 VALUES
     (
         'Chill Woman',
-        E'The coolest woman you\'ll ever meet.',
+        'The coolest woman you\'ll ever meet.',
         'In a freak industrial accident, Chill Woman was dunked in toxic waste. After an agonizing transformation, she developed the ability to exhale sub-zero mist that freezes everything it touches.'
     );
 
@@ -29,8 +29,8 @@ INSERT INTO
 VALUES
     (
         'McMuscles',
-        E'Brute strength can\'t solve all problems, but she doesn\'t believe that.',
-        E'Born on another planet and stranded here during an intergalactic training exercise, Muscles\' muscles expanded to gigantic proportion in Earth\'s nitrogen-rich atmosphere, giving her amazing strength. The extra arms don\'t hurt, either.'
+        'Brute strength can\'t solve all problems, but she doesn\'t believe that.',
+        'Born on another planet and stranded here during an intergalactic training exercise, Muscles\' muscles expanded to gigantic proportion in Earth\'s nitrogen-rich atmosphere, giving her amazing strength. The extra arms don\'t hurt, either.'
     );
 
 INSERT INTO
@@ -38,8 +38,8 @@ INSERT INTO
 VALUES
     (
         'The Hummingbird',
-        E'It\'s a Bird! It\'s a plane! Oh wait, it\'s really just a bird... It\'s The Hummingbird!',
-        E'Perhaps the next step in human evolution, The Hummingbird gained his unique abilities manifested shortly after birth, when he floated out of the hospital nursery and into the care of General Allen Fitzpatrick and his Gamma Team. After Fitzpatrick\'s death at the hands of Omega Force, The Hummingbird went rogue...FOR REVENGE!'
+        'It\'s a Bird! It\'s a plane! Oh wait, it\'s really just a bird... It\'s The Hummingbird!',
+        'Perhaps the next step in human evolution, The Hummingbird gained his unique abilities manifested shortly after birth, when he floated out of the hospital nursery and into the care of General Allen Fitzpatrick and his Gamma Team. After Fitzpatrick\'s death at the hands of Omega Force, The Hummingbird went rogue...FOR REVENGE!'
     );
 
 INSERT INTO
@@ -56,7 +56,7 @@ INSERT INTO
 VALUES
     (
         'Lieutenant Lidar',
-        E'If you don\'t tell the truth, you won\'t get far. Who\'s on the case? Lieutenant Lidar!',
+        'If you don\'t tell the truth, you won\'t get far. Who\'s on the case? Lieutenant Lidar!',
         'Born without the ability to see, Lieutenant Lidar learned from a young age to use his ears. Due to his ability to listen deeply and understand body language nuances before the age of twelve, he was recruited by the Marine Special Forces to help with interviewing high profile liars. One day, he was hit with an intense ray of gamma radiation and the only way the Marine doctors could fix him was to add nanotech robots into his brain. Due to the gamma radiation, nanotech, and prior history of intense deep listening combo, he now has the ability to see everyday objects using his mind, and with immense control he can even zoom in 1000X away!'
     );
 
