@@ -25,5 +25,5 @@ def execute_query(query):
         connection.commit()
         print("Query executed successfully")
         return cursor
-    except Error as e:
+    except OperationalError as e:
         print(f"The error '{e}' occurred")
