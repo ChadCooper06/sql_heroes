@@ -1,23 +1,72 @@
 # This is where you'll execute a series of SQL statements during demo day.
 #from connection import connection
 import psycopg
-from connection import connection
+from connection import create_connection
 from connection import execute_query
 
-# select_heroe = """
-# SELECT * from heroes;
-# """
-# execute_query(select_heroes)
 
-# create_table = """
-# DROP TABLE citizens;
-# CREATE TABLE citizens (
-#     name varchar,
-#     id int GENERATED ALWAYS AS IDENTITY,
-#     alive varchar);
-# """
+#---CREATE A HERO---
 
-# execute_query(create_table)
+def create_hero():
+    create_hero = """
+        INSERT INTO heroes(name, about_me, biography)
+        VALUES ('MisleToe', 'I never miss!', 'A fungal infection caused his toes to literally become missiles...no, LITERALLY!');
+        """
+    print(execute_query(create_hero))
+
+    #print('New Hero found!')
+
+#---CHANGE NAME---
+
+def name_change():
+    name_change = """
+        UPDATE heroes
+        SET name = 'MissileToe'
+        WHERE id = 39;
+    """
+    new_name = (execute_query(name_change))
+    for n in new_name:
+        print("Who are you "+n[0]+"?")
+
+#---CHANGE A POWER(OR ANYTHING)---
+
+def change_power():
+    change_power = """
+        UPDATE heroes
+        SET about_me = 'Creates code and smart remarks'
+        WHERE name = 'C0de M4n';
+        """
+    powers = (execute_query(change_power))
+    for p in powers:
+        print("New powers are "+p[0]+"!")
+
+#--------------
+
+# def create_citizen():
+#     avg_joe = """
+#     INSERT INTO citizens (name, alive)
+#     VALUES ('Lewis', 'Just Barely')
+#     """.format()
+#     print(execute_query(create_citizen))
+
+#---FIND WHO IS FRIENDS WITH MCMUSCLES---
+
+    #nested query where the outer displays the result of the inner
+def friend_names():
+    super_friends = """
+    SELECT name
+    FROM heroes
+    WHERE id IN (
+		SELECT hero2_id
+		FROM relationships
+		WHERE hero1_id = 3 AND relationship_type_id = 1);
+    """
+    friends = (execute_query(super_friends).fetchall())
+    for x in friends:
+        print("McMuscles is friends with " +x[0]+".")
+
+
+#-----------
 
 # delete_table = """
 #     DROP TABLE citizens
@@ -33,25 +82,18 @@ from connection import execute_query
 # """
 # print(heroes)
 
+
+
+# select_heroes = """
+# SELECT * from heroes;
+# """
+# execute_query(select_heroes).fetchone()
+# print (The Seer)
+
 # create_table = """
-# CREATE TABLE accounts (
-# 	user_id serial PRIMARY KEY,
-# 	username VARCHAR ( 50 ) UNIQUE NOT NULL,
-# 	password VARCHAR ( 50 ) NOT NULL,
-# 	email VARCHAR ( 255 ) UNIQUE NOT NULL,
-# 	created_on TIMESTAMP NOT NULL,
-#     last_login TIMESTAMP 
-# );
+# CREATE TABLE citizens (
+#     name varchar,
+#     id int GENERATED ALWAYS AS IDENTITY,
+#     alive varchar);
 # """
 # execute_query(create_table)
-
-# delete_table = """
-# DROP TABLE accounts;
-# """
-# execute_query(delete_table)
-
-show_heroes = """
-SELECT * FROM heroes;
-"""
-execute_query(show_heroes).fetchall()
-print()

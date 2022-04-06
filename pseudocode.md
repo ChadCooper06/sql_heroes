@@ -8,7 +8,7 @@ SELECT some data from the DB to show
 
 ---UPDATE---
 
-UPDATE the DB by adding something or changing something
+UPDATE the DB by adding something or changing something about what was created before
 
 ---DELETE---
 
