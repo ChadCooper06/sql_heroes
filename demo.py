@@ -4,6 +4,16 @@ import psycopg
 from connection import create_connection
 from connection import execute_query
 
+#---INPUT FROM USER---
+def startup():
+    prompt = input("Select an option\n A- Look up a hero\n B- Add your secret identity\n C- Change your info\n D- Delete your info")
+    choice = prompt
+    if choice == 'A' or 'a':
+        
+        "name: \n"
+        "power: \n"
+        "bio: ")
+    print(f"New hero {name} with power of {power} and bio of {bio} added to the registry")
 
 #---CREATE A HERO---
 
