@@ -16,7 +16,7 @@ def create_connection(db_name, db_user, db_password, db_host = "localhost", db_p
         print(f"The error '{e}' occurred")
     return connection
 
-connection = create_connection("postgres", "postgres", "postgres")
+connection = create_connection("superheroes", "postgres", "postgres")
 
 def execute_query(query):
     cursor = connection.cursor()
