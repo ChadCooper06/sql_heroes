@@ -1,8 +1,80 @@
 import psycopg
 import sys
-sys.path.append('/workspace/sql_heroes/')
+sys.path.append('/workspace/sql_heroes/.')
 from connection import create_connection, execute_query
 
+#######################
+# FUNCTIONS FOR DOING #
+#######################
+#--- SEARCH HERO INFO ---
+
+def search_hero(name):
+    execute_query("""
+        SELECT * FROM heroes
+        WHERE name = %s;
+    """, [name])
+    print("That\'s all that is known.")
+
+#--- CREATE A HERO ---
+
+def create_hero(hero_name, hero_power, hero_bio):
+    execute_query("""
+        INSERT INTO heroes(name, about_me, biography)
+        VALUES (%(name)s, %(about_me)s, %(biography)s);
+        """, {'name': "hero_name", 'about_me': "hero_power", 'biography': "hero_bio"})
+    print("The city just got a little safer.")
+
+#--- CHANGE NAME ---
+
+def name_change(new_name, name):
+    execute_query("""
+        UPDATE heroes
+        SET name = %(new_name)s
+        WHERE name = %(name)s;
+    """, {'new_name': "new_name", 'name': "name"})
+    print("Name change successful!")
+
+#--- CHANGE A POWER ---
+
+def change_power(new_about, name):
+    execute_query("""
+        UPDATE heroes
+        SET about_me = %(new_about)s
+        WHERE name = %(name)s;
+        """, {'new_about': "new_about", 'name': "name"})
+    print("Powers updated!")
+    
+#--- CHANGE BIO ---
+
+def change_bio(new_bio, name):
+    execute_query("""
+        UPDATE heroes
+        SET biography = %(new_bio)s
+        WHERE name = %(name)s;
+        """, {'new_bio': "new_bio", 'name': "name"})
+    print("Bio updated!")
+
+#--- DELETE SOMEONE ---
+
+def delete_hero(name):
+    execute_query("""
+        DELETE
+        FROM heroes
+        WHERE name = %s;
+    """, [name])
+    print("So sad....")
+
+#--- SHOW ALL ---
+
+def show_heroes(params):
+    execute_query("""
+        SELECT * FROM heroes
+        ORDER BY name ASC; 
+    """, params)
+    print(show_heroes)
+
+def restart(startup):
+    return startup()
 
 #---INPUT FROM USER---
 def startup():
@@ -56,82 +128,8 @@ def startup():
             startup()
 
 
-#######################
-# FUNCTIONS FOR DOING #
-#######################
-#--- SEARCH HERO INFO ---
+startup() 	
 
-def search_hero(name):
-    search_hero = """
-        SELECT * FROM heroes
-        WHERE name = '{}';
-    """.format(name)
-    execute_query(search_hero)
-    print("That\'s all that is known.")
-
-#--- CREATE A HERO ---
-
-def create_hero(hero_name, hero_power, hero_bio):
-    create_hero = """
-        INSERT INTO heroes(name, about_me, biography)
-        VALUES ('{}', '{}', '{}');
-        """.format(hero_name, hero_power, hero_bio)
-    execute_query(create_hero)
-    print("The city just got a little safer.")
-
-
-#--- CHANGE NAME ---
-
-def name_change(new_name, name):
-    name_change = """
-        UPDATE heroes
-        SET name = '{}'
-        WHERE name = '{}';
-    """.format(new_name, name)
-    execute_query(name_change)
-    print("Name change successful!")
-
-#--- CHANGE A POWER ---
-
-def change_power(new_about, name):
-    change_power = """
-        UPDATE heroes
-        SET about_me = '{}'
-        WHERE name = '{}';
-        """.format(new_about, name)
-    execute_query(change_power)
-    print("Powers updated!")
-    
-#--- CHANGE BIO ---
-
-def change_bio(new_bio, name):
-    change_bio = """
-        UPDATE heroes
-        SET biography = '{}'
-        WHERE name = '{}';
-        """.format(new_bio, name)
-    execute_query(change_bio)
-    print("Bio updated!")
-
-#--- DELETE SOMEONE ---
-
-def delete_hero(name):
-    delete_hero = """
-        DELETE
-        FROM heroes
-        WHERE name = '{}';
-    """.format(name)
-    execute_query(delete_hero)
-    print("So sad....")
-
-#--- SHOW ALL ---
-
-def show_heroes():
-    show_heroes = """
-        SELECT * FROM heroes
-        ORDER BY name ASC; 
-    """
-    print(execute_query(show_heroes))
 
 #--------------
 
@@ -145,20 +143,19 @@ def show_heroes():
 #     """.format()
 #     print(execute_query(create_citizen))
 
-startup() 	
 
 #---FIND WHO IS FRIENDS WITH MCMUSCLES---
 
     #nested query where the outer displays the result of the inner
-def friend_names():
-    super_friends = """
-    SELECT name
-    FROM heroes
-    WHERE id IN (
-		SELECT hero2_id
-		FROM relationships
-		WHERE hero1_id = 3 AND relationship_type_id = 1);
-    """
-    friends = (execute_query(super_friends).fetchall())
-    for x in friends:
-        print("McMuscles is friends with " +x[0]+".")
+# def friend_names():
+#     super_friends = """
+#     SELECT name
+#     FROM heroes
+#     WHERE id IN (
+# 		SELECT hero2_id
+# 		FROM relationships
+# 		WHERE hero1_id = 3 AND relationship_type_id = 1);
+#     """
+#     friends = (execute_query(super_friends).fetchall())
+#     for x in friends:
+#         print("McMuscles is friends with " +x[0]+".")

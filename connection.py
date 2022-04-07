@@ -18,10 +18,10 @@ def create_connection(db_name, db_user, db_password, db_host = "localhost", db_p
 
 connection = create_connection("superheroes", "postgres", "postgres")
 
-def execute_query(query):
+def execute_query(query, params):
     cursor = connection.cursor()
     try:
-        cursor.execute(query)
+        cursor.execute(query, params)
         connection.commit()
         print("Query executed successfully")
         return cursor
