@@ -9,10 +9,10 @@ def startup():
     prompt = input("Select an option\n A- Look up a hero\n B- Add your secret identity\n C- Change your info\n D- Delete your info")
     choice = prompt
     if choice == 'A' or 'a':
-        
+
         "name: \n"
         "power: \n"
-        "bio: ")
+        "bio: "
     print(f"New hero {name} with power of {power} and bio of {bio} added to the registry")
 
 #---CREATE A HERO---
@@ -58,6 +58,13 @@ def change_power():
 #     VALUES ('Lewis', 'Just Barely')
 #     """.format()
 #     print(execute_query(create_citizen))
+
+#  INSERT INTO citizens(name, alive)
+#  VALUES 
+#  	('Karen', 'Alive and kicking...and you will know it too'),
+# 	('Napolean', 'Alive and probably eating a burrito'),
+# 	('Jimothy', 'Dead...or is he?');
+ 	
 
 #---FIND WHO IS FRIENDS WITH MCMUSCLES---
 
