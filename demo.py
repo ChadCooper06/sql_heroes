@@ -9,61 +9,98 @@ def startup():
     prompt = input("Select an option\n A- Look up a hero\n B- Add your secret identity\n C- Change your info\n D- Delete your info")
     choice = prompt
     if choice == 'A' or 'a':
+        print("Who do you want to look up?")
+        hero = input()
+        search_hero(hero)# look up the hero info
+    elif choice == 'B' or 'b':
+        print("What is your secret identity?")
+        hero_name = input()
+        print("What is your power?")
+        hero_power = input()
+        print("Tell us a little about you.")
+        hero_bio = input()
+        create_hero(hero_name, hero_power, hero_bio)# create a new hero with those inputs
+    elif choice == 'C' or 'c':
+        option = input("Would you like to change your info? Select N for name\n S for power-Please list all\n or I for biography.")
+        correction = option
+        if correction == 'N' or 'n':
+            print("Changing your name huh? Who are you?")
+            name = input()
+            print("Go ahead, confuse everyone.")
+            new_name = input()
+            name_change(new_name)
+        elif correction == 'S' or 's':
+            print("Did you fall into more toxic goo? What's your name?")
+            name = input()
+            print("Remember to add all your powers")
+            new_about = input()
+            change_power(new_about)
+        elif correction == 'I' or 'i':
+            print("Having an identity crisis? Who hurt you? Type your name.")
+            name = input()
+            print("Type the info no one will read EXCEPT that ONE guy, you now who I mean. The creepy one.")
+            new_bio = input()
+            change_bio(new_bio)
 
-        "name: \n"
-        "power: \n"
-        "bio: "
-    print(f"New hero {name} with power of {power} and bio of {bio} added to the registry")
+    #print(f"New hero {name} with power of {power} and bio of {bio} added to the registry")
 
 #---CREATE A HERO---
 
-def create_hero():
+def create_hero(hero_name, hero_power, hero_bio):
     create_hero = """
         INSERT INTO heroes(name, about_me, biography)
-        VALUES ('MisleToe', 'I never miss!', 'A fungal infection caused his toes to literally become missiles...no, LITERALLY!');
+        VALUES ('{hero_name}', '{hero_power}', '{hero_bio}');
         """
-    print(execute_query(create_hero))
+    (execute_query(create_hero))
 
     #print('New Hero found!')
 
 #---CHANGE NAME---
 
-def name_change():
+def name_change(new_name):
     name_change = """
         UPDATE heroes
-        SET name = 'MissileToe'
-        WHERE id = 39;
+        SET name = '{new_name}'
+        WHERE name = '{name}';
     """
-    new_name = (execute_query(name_change))
-    for n in new_name:
-        print("Who are you "+n[0]+"?")
+    execute_query(name_change)
+    # for n in new_name:
+    #     print("Who are you "+n[0]+"?")
 
-#---CHANGE A POWER(OR ANYTHING)---
+#---CHANGE A POWER---
 
-def change_power():
+def change_power(new_about, name):
     change_power = """
         UPDATE heroes
-        SET about_me = 'Creates code and smart remarks'
-        WHERE name = 'C0de M4n';
+        SET about_me = '{new_about}'
+        WHERE name = '{name}';
         """
-    powers = (execute_query(change_power))
-    for p in powers:
-        print("New powers are "+p[0]+"!")
+    execute_query(change_power)
+    # for p in powers:
+    #     print("New powers are "+p[0]+"!")
+
+#---CHANGE BIO---
+
+def change_bio(new_bio, name):
+    change_bio = """
+        UPDATE heroes
+        SET biography = '{new_bio}'
+        WHERE name = '{name}';
+        """
+    execute_query(change_bio)
 
 #--------------
 
 # def create_citizen():
 #     avg_joe = """
-#     INSERT INTO citizens (name, alive)
-#     VALUES ('Lewis', 'Just Barely')
+#     INSERT INTO citizens(name, alive)
+    #   VALUES 
+    #   ('Karen', 'Alive and kicking...and you will know it too'),
+    #   ('Napolean', 'Alive and probably eating a burrito'),
+    #   ('Jimothy', 'Dead...or is he?');
 #     """.format()
 #     print(execute_query(create_citizen))
 
-#  INSERT INTO citizens(name, alive)
-#  VALUES 
-#  	('Karen', 'Alive and kicking...and you will know it too'),
-# 	('Napolean', 'Alive and probably eating a burrito'),
-# 	('Jimothy', 'Dead...or is he?');
  	
 
 #---FIND WHO IS FRIENDS WITH MCMUSCLES---
