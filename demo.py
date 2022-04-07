@@ -1,8 +1,8 @@
-# This is where you'll execute a series of SQL statements during demo day.
-#from connection import connection
 import psycopg
-from connection import create_connection
-from connection import execute_query
+import sys
+sys.path.append('/workspace/sql_heroes/')
+from connection import create_connection, execute_query
+
 
 #---INPUT FROM USER---
 def startup():
@@ -54,7 +54,7 @@ def startup():
         elif pick == 'N' or 'n':
             print("Knew you were lame.")
             startup()
-startup()
+
 
 #######################
 # FUNCTIONS FOR DOING #
@@ -67,7 +67,7 @@ def search_hero(name):
         WHERE name = '{}';
     """.format(name)
     execute_query(search_hero)
-print("That\'s all that is known.")
+    print("That\'s all that is known.")
 
 #--- CREATE A HERO ---
 
@@ -77,7 +77,7 @@ def create_hero(hero_name, hero_power, hero_bio):
         VALUES ('{}', '{}', '{}');
         """.format(hero_name, hero_power, hero_bio)
     execute_query(create_hero)
-print("The city just got a little safer.")
+    print("The city just got a little safer.")
 
 
 #--- CHANGE NAME ---
@@ -89,7 +89,7 @@ def name_change(new_name, name):
         WHERE name = '{}';
     """.format(new_name, name)
     execute_query(name_change)
-print("Name change successful!")
+    print("Name change successful!")
 
 #--- CHANGE A POWER ---
 
@@ -100,7 +100,7 @@ def change_power(new_about, name):
         WHERE name = '{}';
         """.format(new_about, name)
     execute_query(change_power)
-print("Powers updated!")
+    print("Powers updated!")
     
 #--- CHANGE BIO ---
 
@@ -111,18 +111,18 @@ def change_bio(new_bio, name):
         WHERE name = '{}';
         """.format(new_bio, name)
     execute_query(change_bio)
-print("Bio updated!")
+    print("Bio updated!")
 
 #--- DELETE SOMEONE ---
 
 def delete_hero(name):
     delete_hero = """
-        DROP *
+        DELETE
         FROM heroes
         WHERE name = '{}';
     """.format(name)
     execute_query(delete_hero)
-print("So sad....")
+    print("So sad....")
 
 #--- SHOW ALL ---
 
@@ -131,7 +131,7 @@ def show_heroes():
         SELECT * FROM heroes
         ORDER BY name ASC; 
     """
-print(execute_query(show_heroes))
+    print(execute_query(show_heroes))
 
 #--------------
 
@@ -145,7 +145,7 @@ print(execute_query(show_heroes))
 #     """.format()
 #     print(execute_query(create_citizen))
 
- 	
+startup() 	
 
 #---FIND WHO IS FRIENDS WITH MCMUSCLES---
 
@@ -162,17 +162,3 @@ def friend_names():
     friends = (execute_query(super_friends).fetchall())
     for x in friends:
         print("McMuscles is friends with " +x[0]+".")
-
-# select_heroes = """
-# SELECT * from heroes;
-# """
-# execute_query(select_heroes).fetchone()
-# print (The Seer)
-
-# create_table = """
-# CREATE TABLE citizens (
-#     name varchar,
-#     id int GENERATED ALWAYS AS IDENTITY,
-#     alive varchar);
-# """
-# execute_query(create_table)
