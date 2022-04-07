@@ -6,88 +6,132 @@ from connection import execute_query
 
 #---INPUT FROM USER---
 def startup():
-    prompt = input("Select an option\n A- Look up a hero\n B- Add your secret identity\n C- Change your info\n D- Delete your info")
+    prompt = input("Select an option\n A- Look up a hero\n B- Add your secret identity\n C- Change your info\n D- Delete your info\n")
     choice = prompt
     if choice == 'A' or 'a':
-        print("Who do you want to look up?")
+        print("Who do you want to look up?\n")
         hero = input()
-        search_hero(hero)# look up the hero info
+        search_hero(hero) # look up the info for a specific hero
     elif choice == 'B' or 'b':
-        print("What is your secret identity?")
+        print("What is your secret identity?\n")
         hero_name = input()
-        print("What is your power?")
+        print("What is your power?\n")
         hero_power = input()
-        print("Tell us a little about you.")
+        print("Tell us a little about you.\n")
         hero_bio = input()
         create_hero(hero_name, hero_power, hero_bio)# create a new hero with those inputs
     elif choice == 'C' or 'c':
-        option = input("Would you like to change your info? Select N for name\n S for power-Please list all\n or I for biography.")
+        option = input("Would you like to change your info? Select N for name\n S for power-Please list all\n or I for biography.\n")
         correction = option
         if correction == 'N' or 'n':
-            print("Changing your name huh? Who are you?")
+            print("Changing your name huh? Who are you?\n")
             name = input()
-            print("Go ahead, confuse everyone.")
+            print("Go ahead, confuse everyone.\n")
             new_name = input()
-            name_change(new_name)
+            name_change(new_name)# change the name of the individual hero
         elif correction == 'S' or 's':
-            print("Did you fall into more toxic goo? What's your name?")
+            print("Did you fall into more toxic goo? What's your name?\n")
             name = input()
-            print("Remember to add all your powers")
+            print("Remember to add all your powers.\n")
             new_about = input()
-            change_power(new_about)
+            change_power(new_about)# change the power(s) of the individual hero
         elif correction == 'I' or 'i':
-            print("Having an identity crisis? Who hurt you? Type your name.")
+            print("Having an identity crisis? Who hurt you? Type your name.\n")
             name = input()
-            print("Type the info no one will read EXCEPT that ONE guy, you now who I mean. The creepy one.")
+            print("Type the info no one will read EXCEPT that ONE guy, you now who I mean. The creepy one...Jeff.\n")
             new_bio = input()
-            change_bio(new_bio)
+            change_bio(new_bio)# change the bio of the individual hero
+    elif choice == 'D' or 'd':
+        print("Are you deleting to go into hiding or because you killed the person? Know what, nevermind that. Please type the name to be deleted.\n")
+        name = input()
+        delete_hero(name)# delete a hero
+    elif choice == 'X' or 'x':
+        statement = input("Oh you\'re a clever one huh? Fine, want to see every hero?\n Y or N\n")
+        pick = statement
+        if pick == 'Y' or 'y':
+            print("Please don\'t do anything nefarious with this information...wink, wink.\n")
+            show_heroes()# show all heroes and info
+        elif pick == 'N' or 'n':
+            print("Knew you were lame.")
+            startup()
+startup()
 
-    #print(f"New hero {name} with power of {power} and bio of {bio} added to the registry")
+#######################
+# FUNCTIONS FOR DOING #
+#######################
+#--- SEARCH HERO INFO ---
 
-#---CREATE A HERO---
+def search_hero(name):
+    search_hero = """
+        SELECT * FROM heroes
+        WHERE name = '{}';
+    """.format(name)
+    execute_query(search_hero)
+print("That\'s all that is known.")
+
+#--- CREATE A HERO ---
 
 def create_hero(hero_name, hero_power, hero_bio):
     create_hero = """
         INSERT INTO heroes(name, about_me, biography)
-        VALUES ('{hero_name}', '{hero_power}', '{hero_bio}');
-        """
-    (execute_query(create_hero))
+        VALUES ('{}', '{}', '{}');
+        """.format(hero_name, hero_power, hero_bio)
+    execute_query(create_hero)
+print("The city just got a little safer.")
 
-    #print('New Hero found!')
 
-#---CHANGE NAME---
+#--- CHANGE NAME ---
 
-def name_change(new_name):
+def name_change(new_name, name):
     name_change = """
         UPDATE heroes
-        SET name = '{new_name}'
-        WHERE name = '{name}';
-    """
+        SET name = '{}'
+        WHERE name = '{}';
+    """.format(new_name, name)
     execute_query(name_change)
-    # for n in new_name:
-    #     print("Who are you "+n[0]+"?")
+print("Name change successful!")
 
-#---CHANGE A POWER---
+#--- CHANGE A POWER ---
 
 def change_power(new_about, name):
     change_power = """
         UPDATE heroes
-        SET about_me = '{new_about}'
-        WHERE name = '{name}';
-        """
+        SET about_me = '{}'
+        WHERE name = '{}';
+        """.format(new_about, name)
     execute_query(change_power)
-    # for p in powers:
-    #     print("New powers are "+p[0]+"!")
-
-#---CHANGE BIO---
+print("Powers updated!")
+    
+#--- CHANGE BIO ---
 
 def change_bio(new_bio, name):
     change_bio = """
         UPDATE heroes
-        SET biography = '{new_bio}'
-        WHERE name = '{name}';
-        """
+        SET biography = '{}'
+        WHERE name = '{}';
+        """.format(new_bio, name)
     execute_query(change_bio)
+print("Bio updated!")
+
+#--- DELETE SOMEONE ---
+
+def delete_hero(name):
+    delete_hero = """
+        DROP *
+        FROM heroes
+        WHERE name = '{}';
+    """.format(name)
+    execute_query(delete_hero)
+print("So sad....")
+
+#--- SHOW ALL ---
+
+def show_heroes():
+    show_heroes = """
+        SELECT * FROM heroes
+        ORDER BY name ASC; 
+    """
+print(execute_query(show_heroes))
 
 #--------------
 
@@ -118,25 +162,6 @@ def friend_names():
     friends = (execute_query(super_friends).fetchall())
     for x in friends:
         print("McMuscles is friends with " +x[0]+".")
-
-
-#-----------
-
-# delete_table = """
-#     DROP TABLE citizens
-# """
-
-# execute_query(delete_table)
-
-
-
-# select_heroes = """
-#     SELECT * FROM public.heroes:
-#     ORDER BY id ASC; 
-# """
-# print(heroes)
-
-
 
 # select_heroes = """
 # SELECT * from heroes;
