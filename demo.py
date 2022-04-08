@@ -69,12 +69,14 @@ def delete_hero(name):
 
 #--- SHOW ALL ---#
 
-def show_heroes():
+def show_heroes(name, about_me, biography):
     execute_query("""
-        SELECT * FROM heroes
+        SELECT name, about_me, biography
+        FROM heroes
         ORDER BY name ASC; 
-    """)
-    print(show_heroes)
+    """, name, about_me, biography).fetchall()
+    for hero in heroes:
+        print(show_heroes)
 
 ##################
 # READY PLAYER 1 #
@@ -101,7 +103,7 @@ def startup():
         hero_power = input()
         print("Tell us a little about you.\n")
         hero_bio = input()
-        create_hero([hero_name], [hero_power], [hero_bio]) # create a new hero with those inputs
+        create_hero(hero_name, hero_power, hero_bio) # create a new hero with those inputs
         startup()
     elif choice == 'c':
         option = input("Would you like to change your info? Select\n" 
@@ -114,19 +116,19 @@ def startup():
             name = input()
             print("Go ahead, confuse everyone.\n")
             new_name = input()
-            name_change([new_name], [name])# change the name of the individual hero
+            name_change(new_name, name) # change the name of the individual hero
         elif correction == 's':
             print("Did you fall into more toxic goo? What's your name?\n")
             name = input()
             print("Remember to add all your powers.\n")
             new_about = input()
-            change_power([new_about], [name])# change the power(s) of the individual hero
+            change_power(new_about, name) # change the power(s) of the individual hero
         elif correction == 'i':
             print("Having an identity crisis? Who hurt you? Type your name.\n")
             name = input()
             print("Type the info no one will read EXCEPT that ONE guy, you now who I mean. The creepy one...Jeff.\n")
             new_bio = input()
-            change_bio([new_bio], [name])# change the bio of the individual hero
+            change_bio(new_bio, name) # change the bio of the individual hero
             startup()
         else: print("Something went wrong") 
         startup()
@@ -134,14 +136,14 @@ def startup():
         print("Are you deleting to go into hiding or because you killed the person? Know what, nevermind that.\n" 
         "Please type the name to be deleted.\n")
         name = input()
-        delete_hero(name)# delete a hero
+        delete_hero(name) # delete a hero
         startup()
     elif choice == 'x':
         statement = input("Oh you\'re a clever one huh? Fine, want to see every hero?\n Y or N\n")
         pick = statement.lower()
         if pick == 'y':
             print("Please don\'t do anything nefarious with this information...wink, wink.\n")
-            show_heroes()# show all heroes and info
+            show_heroes(name, about_me, biography) # show all heroes and info
             startup()
         elif pick == 'n':
             print("Knew you were lame.")
