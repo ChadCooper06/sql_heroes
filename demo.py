@@ -9,22 +9,22 @@ from connection import create_connection, execute_query
 
 #--- SEARCH HERO INFO ---#
 
-def search_hero(name):
+def search_hero(name): # The execute_query sends the SQL in it to the DB to make changes or calls depending on request
     hero = execute_query("""
         SELECT name, about_me 
         FROM heroes
-        WHERE name = %s;
-    """, name).fetchall()
+        WHERE name = %s
+    """, (name,)).fetchall()
     print("What we know is:\n")
-    print(hero)
+    print(hero[0])
 
 #--- CREATE A HERO ---#
 
-def create_hero(hero_name, hero_power, hero_bio):
+def create_hero(hero_name, hero_power, hero_bio): # The %s is a string placeholder for the information to be used as variables
     execute_query("""
-        INSERT INTO heroes(name, about_me, biography)
-        VALUES (%s, %s, %s);
-        """, (hero_name, hero_power, hero_bio))
+        INSERT INTO heroes (name, about_me, biography)
+        VALUES (%s, %s, %s) 
+        """, [hero_name, hero_power, hero_bio])
     print("Welcome hero! The city just got a little safer.")
 
 #--- CHANGE NAME ---#
@@ -33,7 +33,11 @@ def name_change(name, new_name):
     execute_query("""
         UPDATE heroes
         SET name = %s
-        WHERE name = %s;
+        WHERE name IN (
+            SELECT name
+            FROM heroes
+            WHERE name = %s
+        )
     """, (new_name, name))
     print("Name change successful!")
 
@@ -42,9 +46,12 @@ def name_change(name, new_name):
 def change_power(name, about_me):
     execute_query("""
         UPDATE heroes
-        SET about_me = %(new_about)s
-        WHERE name = %(name)s;
-        """, 'name' == name, 'about_me' == new_about)
+        SET about_me = %s
+        WHERE name in (
+            SELECT name
+            FROM heroes
+            WHERE name = %s)
+        """, [about_me, name])
     print("Powers updated!")
     
 #--- CHANGE BIO ---#
@@ -52,9 +59,13 @@ def change_power(name, about_me):
 def change_bio(name, biography):
     execute_query("""
         UPDATE heroes
-        SET biography = %(new_bio)s
-        WHERE name = %(name)s;
-        """, 'name' == name, 'biography' == new_bio)
+        SET biography = %s
+        WHERE name IN (
+            SELECT name
+            FROM heroes
+            WHERE name = %s
+        )
+        """, [biography, name])
     print("Bio updated!")
 
 #--- DELETE SOMEONE ---#
@@ -63,20 +74,21 @@ def delete_hero(name):
     execute_query("""
         DELETE
         FROM heroes
-        WHERE name = %s;
-    """, name)
+        WHERE name = %s
+    """, (name,))
     print("So sad....Would you like some cake?")
 
 #--- SHOW ALL ---#
 
-def show_heroes(name, about_me, biography):
-    execute_query("""
+def show_heroes(): # This will print the info for every hero, but is only accessed if you know the right key to press
+    heroes = execute_query("""
         SELECT name, about_me, biography
         FROM heroes
-        ORDER BY name ASC; 
-    """, name, about_me, biography).fetchall()
+        ORDER BY name ASC;
+    """).fetchall()
     for hero in heroes:
-        print(show_heroes)
+        print(hero)
+        print("\n")
 
 ##################
 # READY PLAYER 1 #
@@ -84,7 +96,7 @@ def show_heroes(name, about_me, biography):
 
 #--- INPUT FROM USER ---#
 
-def startup():
+def startup(): # Runs as soon as python loads this file-very much enjoyed making this-sorry for the snarky prompts :P
     prompt = input("\nSelect an option\n" 
         "A- Look up a hero\n" 
         "B- Add your secret identity\n" 
@@ -95,7 +107,7 @@ def startup():
         print("\nWho do you want to look up?\n")
         hero = input()
         search_hero(hero) # look up the info for a specific hero
-        startup()
+        startup() # Recycles back to the initial prompt after each successful running of a function
     elif choice == 'b':
         print("\nWhat is your secret identity?\n")
         hero_name = input()
@@ -106,55 +118,56 @@ def startup():
         create_hero(hero_name, hero_power, hero_bio) # create a new hero with those inputs
         startup()
     elif choice == 'c':
-        option = input("Would you like to change your info? Select\n" 
+        option = input("\nWould you like to change your info? Select\n" 
             "N for name\n"
             "S for power-Please list all\n" 
             "I for biography.\n")
         correction = option.lower()
         if correction == 'n':
-            print("Changing your name huh? Who are you?\n")
+            print("\nChanging your name huh? Who are you?\n")
             name = input()
-            print("Go ahead, confuse everyone.\n")
+            print("\nGo ahead, confuse everyone.\n")
             new_name = input()
-            name_change(new_name, name) # change the name of the individual hero
+            name_change(name, new_name) # change the name of the individual hero
         elif correction == 's':
-            print("Did you fall into more toxic goo? What's your name?\n")
+            print("\nDid you fall into more toxic goo? What's your name?\n")
             name = input()
-            print("Remember to add all your powers.\n")
-            new_about = input()
-            change_power(new_about, name) # change the power(s) of the individual hero
+            print("\nRemember to add all your powers.\n")
+            about_me = input()
+            change_power(name, about_me) # change the power(s) of the individual hero
         elif correction == 'i':
-            print("Having an identity crisis? Who hurt you? Type your name.\n")
+            print("\nHaving an identity crisis? Who hurt you? Type your name.\n")
             name = input()
-            print("Type the info no one will read EXCEPT that ONE guy, you now who I mean. The creepy one...Jeff.\n")
+            print("\nType the info no one will read EXCEPT that ONE guy, you now who I mean. The creepy one...Jeff.\n")
             new_bio = input()
-            change_bio(new_bio, name) # change the bio of the individual hero
+            change_bio(name, new_bio) # change the bio of the individual hero
             startup()
-        else: print("Something went wrong") 
+        else: print("\nSomething went wrong\n") # My catch all in case something is not input correctly
         startup()
     elif choice == 'd':
-        print("Are you deleting to go into hiding or because you killed the person? Know what, nevermind that.\n" 
+        print("\nAre you deleting to go into hiding or because you killed the person? Know what, nevermind that.\n" 
         "Please type the name to be deleted.\n")
         name = input()
         delete_hero(name) # delete a hero
         startup()
     elif choice == 'x':
-        statement = input("Oh you\'re a clever one huh? Fine, want to see every hero?\n Y or N\n")
+        statement = input("\nOh you\'re a clever one huh? Fine, want to see every hero?\n Y or N\n")
         pick = statement.lower()
         if pick == 'y':
-            print("Please don\'t do anything nefarious with this information...wink, wink.\n")
-            show_heroes(name, about_me, biography) # show all heroes and info
+            print("\nPlease don\'t do anything nefarious with this information...wink, wink.\n")
+            show_heroes() # show all heroes and info
             startup()
         elif pick == 'n':
-            print("Knew you were lame.")
+            print("\nKnew you were lame.\n")
             startup()
-        else: print("They know...run!")
-    else: print("AH AH AH You didn\'t say the magic word!")
+        else: print("\nThey know...run!\n") # Another catch
+    else: print("\nAH AH AH You didn\'t say the magic word!\n") # Defensive programming!
     startup()
 
-startup() 	
+startup() # restarts the whole program from the start
 
 
+####################################################################
 #-------------- OTHER FUNCTIONS TO INCORPORATE LATER --------------#
 
 def create_citizen(params):
