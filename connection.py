@@ -23,10 +23,11 @@ def execute_query(query, params):
     try:
         cursor.execute(query, params)
         connection.commit()
-        print("Query executed successfully")
+        #print("Query executed successfully")
         return cursor
     except OperationalError as e:
         print("The error '{e}' occurred")
+
 
 
 # from psycopg import OperationalError, connect
